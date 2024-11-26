@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authcontroller;
 use App\Http\Controllers\dashboardcontroller;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\admincontroller;
+use App\Http\Controllers\admin\UserController as adminUsercontroller;
+use App\Http\Controllers\usercontroller;
+
 
 Route::get('/', [PostController::class,'index'])->name('home');
 Route::get('/create', [PostController::class,'create'])->name('posts.create');
@@ -20,3 +24,8 @@ Route::post('/logout',[Authcontroller::class,'logout'])->name('logout');
 
 Route::view('/login', 'Auth.login')->name('login');
 Route::post('/login',[Authcontroller::class,'login']);
+
+Route::get('/admin',[adminController::class,'index'])->name('admin.index');
+Route::get('/admin/users',[adminUsercontroller::class,''])->name('admin.users');
+
+Route::resource('users',userController::class)->only('show', 'edit','update');
