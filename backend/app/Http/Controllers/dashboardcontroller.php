@@ -12,7 +12,7 @@ class dashboardcontroller extends Controller
     public function index (User $user )
     {
     // $posts = Auth::user()->posts()->latest()->paginate(6);
-        return view('dashboard',);
+        return view('dashboard.index',);
     }
 
     // public function userspost(User $user){
