@@ -11,13 +11,11 @@ const[formData, setformData] = useState({
   password: "",
   password_confirmation: ""
 });
-console.log(formData);
  const [ errors , seterrors] = useState({});
-
-async function handleregister (e){
+async function handleregister(e){
 e.preventdefault();
 const res = await fetch("/api/register",{
- method:"post",
+ method:"POST",
  body:JSON.stringify(formData),
 });
 const data = await res.json();
