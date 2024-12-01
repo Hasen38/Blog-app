@@ -1,32 +1,28 @@
-import { createContext, useEffect, useState } from "react";
+// import { createContext, useState } from "react";
+// // import axios from "axios";
+//   export const AppContext = createContext();
 
-  export const AppContext = createContext();
+// export default function AppProvider({children})
+// {
+// const [ token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
+// const [user, setUser] = useState(null);
 
-export default function AppProvider({children})
-{
-const [token, setToken] = useState(localStorage.getItem('token'));
-const [user, setUser] = useState(null);
+// const setToken = (token)=> {
+//     _setToken(token)
+//     if (token) {
+//       localStorage.setItem('ACCESS_TOKEN',token); 
+//     }else{
+//         localStorage.removeItem('ACCESS_TOKEN');
+//     }
 
-async function getUser(){
-    const res = await fetch("api/user",{
-method:'post',
-headers:{
-    Authorization:`Bearer ${token}`,
-}
-});
-const data = await res.json();
-setUser(data)
-};
-useEffect(() => {
-    if(token) {
-        getUser();
-    }
-},[token]);
-return(
+// return(
     
-    <AppContext.Provider value={{token, setToken , user, setUser}}>
-    {children}
-    </AppContext.Provider>
-    );
-}
-
+//     <AppContext.Provider value={{token, 
+//         user,
+//       setToken 
+//      ,setUser}}>
+//     {children}
+//     </AppContext.Provider>
+//     );
+// }
+// }

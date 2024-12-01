@@ -1,6 +1,6 @@
 // Navbar.jsx
-import { NavLink } from 'react-router-dom';
 import React, { useState } from "react";
+import { NavLink } from 'react-router-dom';
 import { FaGithub } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
