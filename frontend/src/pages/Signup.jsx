@@ -1,9 +1,9 @@
-import React,{useContext, useState} from 'react'
-import { AppContext } from '../Context/Appcontext'
+import React,{useState} from 'react'
+// import { AppContext } from '../Context/Appcontext'
 
 function Signup() {
 
-  const{setToken} = useContext(AppContext);
+  // const{setToken} = useContext(AppContext);
 
 const[formData, setformData] = useState({
   fullname: "",
