@@ -1,10 +1,12 @@
 import React from 'react';
 import * as ReactDOM from "react-dom/client";
-import App  from './App';
-// import AppProvider from './Context/Appcontext';
+import Router  from './App';
+import AppProvider from './Context/Maincontext';
+import { RouterProvider } from 'react-router-dom';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    // <AppProvider>
-     <App/>
-    //  {/* </AppProvider> */}
+    <AppProvider>
+      <RouterProvider router={Router}/>
+     </AppProvider>
 );
