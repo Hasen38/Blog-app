@@ -8,7 +8,6 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineClose } from "react-icons/md";
  
 
-
 const Navbar = () => {
 const [isMenuopen , setisMenuopen] = useState(false);
 const togglemenu = ()=>{
@@ -44,7 +43,7 @@ const togglemenu = ()=>{
           <a href="/" className="hover:text-orange-400"><FaGithub /></a>
           <a href="/"className="hover:text-orange-400"><FaInstagram /></a>
           <a href="/" className="hover:text-orange-400"><FaFacebook/> </a>
-          <a href="/" className="bg-orange-400 rounded-md px-4 py-2 hover:bg-white hover:text-orange-400 transition-all duration-200 ease-in">Sign In</a>
+          <a href="/login" className="bg-orange-400 rounded-md px-4 py-2 hover:bg-white hover:text-orange-400 transition-all duration-200 ease-in">Sign In</a>
         </div >
         <div className="md:hidden absolute right-3 top-4 ">
         <button onClick={togglemenu} className="cursor-pointer">
@@ -58,12 +57,12 @@ const togglemenu = ()=>{
           <ul className={`md:hidden gap-12 text-lg block space-y-3 bg-white ${isMenuopen ? " w-full top-0 left-0 transition-all duration-150 ease-out" : "hidden"}`}>
 {
         navItems.map(({path,link}) => <li className="text-black" key={path}>
-            <navlink className={({ isActive, isPending }) =>
+            <NavLink className={({ isActive, isPending }) =>
                       isActive
                         ? "active"
                         : isPending
                         ? "pending"
-                        : ""} to={path} onClick={togglemenu}>{link}</navlink>
+                        : ""} to={path} onClick={togglemenu}>{link}</NavLink>
             </li>
           )
 }

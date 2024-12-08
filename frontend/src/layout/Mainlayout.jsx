@@ -11,4 +11,4 @@ function Mainlayout() {
   )
 }
 
-export default Mainlayout
+export default Mainlayout;

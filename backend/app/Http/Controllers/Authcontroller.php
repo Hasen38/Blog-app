@@ -5,25 +5,29 @@ use App\Models\User;
 
 // use i\Http\Controllers\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 
 class Authcontroller extends Controller
 {
     public function register(Request $request)
     {
-        $fields=$request->validate([
+        $fields = $request->validate([
             "name"=> "required|",
             "email"=> "required|email|unique:users",
             "password"=> "required|confirmed",
-            ]);
+        ],);
             
             $user= user::create($fields);
-            $token= $user->createToken($request->name)->plainTextToken;
-            return [
-                "token"=> $token,
-                "user" =>$user
-            ];
+            event(new Registered($user));
+            // $token= $user->createToken($request->name)->plainTextToken;
+            // return [
+            //     "token"=> $token,
+            //     "user" =>$user
+            // ];
+            return response()->json(['message' => 'Registration successful. Please check your email.'], 201);
     }
 
     public function login(Request $request)
@@ -37,7 +41,7 @@ class Authcontroller extends Controller
          }      
            $credentials = ['email'=>$request->email,'password'=>$request->password];
            try{
-            if (!auth()->attempt($credentials)) {
+            if (!Auth::attempt($credentials)) {
                 return response()->json(['error'=>'Invalid credentials'],403);  
             }
             $user=User::where('email',$request->email)->firstorFail();
@@ -56,7 +60,7 @@ class Authcontroller extends Controller
 
   public function logout(Request $request)
 {
-    $request->user()->tokens()->delete();
+    $request->user()->CurrentAccessToken()->delete();
     return response()->json(['success'=> 'User has been logged out succesfully'],200);
 }
 

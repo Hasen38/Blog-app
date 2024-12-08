@@ -1,16 +1,15 @@
 import React from 'react';
-import {createBrowserRouter,createRoutesFromElements,RouterProvider,Route } from 'react-router-dom';
-import Guestlayout from './layout/Guestlayout';
+import {createBrowserRouter,createRoutesFromElements,Route } from 'react-router-dom';
 import Mainlayout from './layout/Mainlayout';
 import Home from './pages/Home';
 import About from './pages/About';
 import Blog from './pages/blog';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
+// import Register from './pages/Register';
 import Contact from './pages/Contact';
 import './index.css';
+import Signup from './pages/Signup';
 
-function App() {
     const router = createBrowserRouter(
         createRoutesFromElements(
         <>
@@ -20,18 +19,15 @@ function App() {
             <Route path='about'  element={<About />} />
             <Route path='contact'  element={<Contact />} />
             </Route>
-            <Route  element={<Guestlayout/>}>
                 <Route path='/login' element={<Login/>}/>
                 <Route path='/Signup' element={<Signup/>}/>
-            </Route>
             </>
         )
+    ); 
 
-); 
-    return (
-        <div>         
-       <RouterProvider router={router}/>
-       </div>
-);
-}
-export default App;
+    
+         
+      
+       
+
+export default router;

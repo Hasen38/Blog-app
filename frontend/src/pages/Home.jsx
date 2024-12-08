@@ -1,13 +1,13 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import Banner from '../components/banner';
-// import { AppContext } from '../Context/Appcontext';
+import {MainContext}  from '../Context/Maincontext';
 
 function home() {
-  // const {name} = useContext(AppContext);
+  const {name} = useContext(MainContext);
   return (
     <div>
        <Banner/>
-
+    <h1>{ name }</h1>
     </div>
 
   )
