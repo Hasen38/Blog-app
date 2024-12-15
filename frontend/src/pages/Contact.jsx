@@ -1,9 +1,9 @@
 import React from 'react'
 
-function cotact() {
+function contact() {
   return (
     <div>cotact page</div>
   )
 }
 
-export default cotact
+export default contact

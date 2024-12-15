@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import axiosClient from '../Axios/Axios-client';
 import { MainContext } from '../Context/Maincontext';
-
+import { useNavigate } from 'react-router-dom';
 const Signup = () => {
   // State to hold form data and error messages
   const {setToken,setUser} = useContext(MainContext);
@@ -42,7 +42,7 @@ const Signup = () => {
 //     setErrors(newErrors);
 //     return Object.keys(newErrors).length === 0;
 //   };
-
+const navigate = useNavigate();
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,6 +52,7 @@ const Signup = () => {
       .then(({data})=>{
         setUser(data.user)
         setToken(data.token)
+        navigate('/');
       }).catch(error =>{
       const response = error.response;
       if (response && response.status === 422) {

@@ -1,4 +1,5 @@
 import {createContext, useState} from "react";
+// import axiosClient from "../Axios/Axios-client";
 
 export const MainContext = createContext();
 
@@ -20,7 +21,7 @@ const setToken = (token)=> {
       user,
       setUser,
       token,
-      setToken
+      setToken,
     }}>
         {children}
     </MainContext.Provider>
