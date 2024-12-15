@@ -1,21 +1,23 @@
-import React, { useContext, useState } from 'react';
-import axiosClient from '../Axios/Axios-client';
-import { MainContext } from '../Context/Maincontext';
+import React, { useContext, useState } from "react";
+import axiosClient from "../Axios/Axios-client";
+import { MainContext } from "../Context/Maincontext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   // State to hold form data and error messages
-  const {setToken,setUser} = useContext(MainContext);
+  const { setToken, setUser } = useContext(MainContext);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
   });
 
   // Handle form field changes
@@ -27,51 +29,41 @@ const Login = () => {
     });
   };
 
-  // Form validation
-//   const validateForm = () => {
-//     const newErrors = {};
-
-//     if (!formData.name) newErrors.name = 'Name is required';
-//     if (!formData.email) {
-//       newErrors.email = 'Email is required';
-//     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-//       newErrors.email = 'Email is invalid';
-//     }
-//     if (!formData.password) newErrors.password = 'Password is required';
-
-//     setErrors(newErrors);
-//     return Object.keys(newErrors).length === 0;
-//   };
-
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (validateForm()) {
-      // Submit the form data (can make an API request here)
-      axiosClient.post('/login',formData)
-      .then(({data})=>{
-        setUser(data.user)
-        setToken(data.token)
-      }).catch(error =>{
-      const {response} = error.response;
-      if (response && response.status === 422) {
-         setErrors(response.data.errors);
-        }
+    // Submit the form data (can make an API request here)
+    axiosClient
+      .post("/login", formData)
+      .then(({ data }) => {
+        setUser(data.user);
+        setToken(data.token);
+        navigate("/");
       })
-      console.log('Form Data Submitted:', formData);
-    };
-//   };
+      .catch((error) => {
+        const { response } = error.response;
+        if (response && response.status === 422) {
+          setErrors(response.data.errors);
+        }
+      });
+    console.log("Form Data Submitted:", formData);
+  };
+  //   };
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Create an Account</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+          Create an Account
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-         
-
           {/* Email Input */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email Address
             </label>
             <input
@@ -82,12 +74,17 @@ const Login = () => {
               onChange={handleInputChange}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
             />
-            {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+            )}
           </div>
 
           {/* Password Input */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -98,7 +95,9 @@ const Login = () => {
               onChange={handleInputChange}
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
             />
-            {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+            )}
           </div>
           {/* Submit Button */}
           <div>
@@ -113,7 +112,7 @@ const Login = () => {
 
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <a href="/signup" className="text-indigo-600 hover:text-indigo-700">
               Signup
             </a>
