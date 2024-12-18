@@ -27,6 +27,8 @@ const BlogCard = ({ posts}) => {
 
           {/* Blog Content */}
           <div className="p-6">
+            {post.image ? (<img src={`storage/${post.image}`} className='w-50' alt="images" />):(<p>No image</p>
+            )}
             <h2 className="text-2xl font-bold text-gray-800">{post.title}</h2>
             <p className="text-gray-600 text-sm my-2">
               By {post.user?.name} | {new Date(post.created_at).toLocaleDateString()}
@@ -35,15 +37,19 @@ const BlogCard = ({ posts}) => {
 
             <div className="mt-4 flex justify-between items-center">
               <Link
-                to={`/blog/${post.id}`} // Link to the individual post
+                to={`/show/${post.id}`} // Link to the individual post
                 className="text-blue-600 hover:text-blue-800 font-semibold"
               >
                 Read more
               </Link>
             </div>
+            <div>
+           <Link to={`edit/${post.id}`} className="px-6 py-2 bg-gray-800 text-white rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600">Edit</Link>
+           </div>
           </div>
         </div>
-      ))}
+))}
+    
     </div>
   );
 };

@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import './index.css';
 import Signup from './pages/Signup';
 import Create from './pages/Create'
+import Edit from './pages/Edit';
 
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -20,7 +21,8 @@ import Create from './pages/Create'
             {/* <Route path='blogs'  element={<Blogs />} /> */}
             <Route path='about'  element={<About />} />
             <Route path='contact'  element={<Contact />} />
-            <Route path='/blog/:post'  element={<Blog />} />
+            <Route exact path='/show/:post'  element={<Blog />} />
+            <Route exact path='/edit/:post'  element={<Edit/>} />
             </Route>
                 <Route path='/login' element={<Login/>}/>
                 <Route path='/Signup' element={<Signup/>}/>
