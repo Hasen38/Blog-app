@@ -33,38 +33,25 @@ public function store(Request $request)
     $request->validate([
         'title' => 'required|max:50',
         'body' => 'required|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate image if uploaded
+        'image' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:2048',
+         // Validate image if uploaded
     ]);
 
-    // Initialize $image variable to null in case no image is uploaded
-    $image = null;
-
     // Check if the request has an image file
-    if ($request->hasFile('image')) {
-        // Store the image in the 'public/images' folder
-        $imagePath = $request->file('image')->store('public/images');
-        // The $imagePath will return a path like "public/images/filename.jpg"
-        // You need to save only the relative path to the image in the database
-        // We remove the "public/" part so that the stored path is relative to the public folder
-        $image = str_replace('public/', '', $imagePath);
-    }
-
-    // Try to create a new post
-    try {
-        $post = Post::create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'user_id' => Auth::id(),
-            'image' => $image, // Store the relative path of the image in the database
-        ]);
-
-        // Return the post as a JSON response
-        return response()->json($post, 201);
-    } catch (\Exception $th) {
-        // Return error if there is an issue
-        return response()->json(['error' => $th->getMessage()], 403);
+    if ($request->has('image')) {
+       $imagepath= request()->file('image')->store('images','public');
+       // Try to create a new post
+           $post = Post::create([
+               'title' => $request->title,
+               'body' => $request->body,
+               'user_id' => Auth::id(),
+               'image' => $imagepath, // Store the relative path of the image in the database
+           ]);
+           return response()->json($post);
     }
 }
+    
+ 
 
 
     /**
@@ -72,7 +59,12 @@ public function store(Request $request)
      */
     public function show(Post $post)
     {
-        return response()->json($post);
+
+        // Return the post along with the associated user
+        return response()->json($post,
+    
+          // You can access the user like this
+);
     }
 
 
@@ -91,9 +83,8 @@ public function store(Request $request)
         }
 
         $post->title = $request->title;
-        $post->content = $request->content;
+        $post->body = $request->content;
         $post->save();
-
         return response()->json($post,200);
 
     }

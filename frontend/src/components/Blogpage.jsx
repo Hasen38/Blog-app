@@ -27,7 +27,7 @@ function Blogpage() {
   }
 
   return (
-    <div>
+    <div className='mt-15'>
       <Blogcard posts={posts}/>
     </div>
   )
