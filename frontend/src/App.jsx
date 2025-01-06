@@ -4,9 +4,7 @@ import Mainlayout from './layout/Mainlayout';
 import Home from './pages/Home';
 import About from './pages/About';
 import Blog from './pages/Blog';
-// import Blogs from './pages/Blogs';
 import Login from './pages/Login';
-// import Verifyemail from './pages/Verifyemail'
 import Contact from './pages/Contact';
 import './index.css';
 import Signup from './pages/Signup';
@@ -31,10 +29,4 @@ import Edit from './pages/Edit';
             </>
         )
     ); 
-
-    
-         
-      
-       
-
 export default router;
