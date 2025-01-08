@@ -14,6 +14,7 @@ class Authcontroller extends Controller
 {
     public function register(Request $request)
     {
+        try{
         $fields = $request->validate([
             "name"=> "required",
             "email"=> "required|email|unique:users",
@@ -27,11 +28,10 @@ class Authcontroller extends Controller
                 "token"=> $token,
                 "user" =>$user
             ],201);
-            // return response()->json([
-            //     'user'=>$user,
-            //     'token'=>$token
-            // ], 201);
-    }
+      } catch (\Exception $e) {
+            return response()->json(['error' => 'Registration failed', 'message' => $e->getMessage()], 500);
+        }
+            
 
     public function login(Request $request)
     {
