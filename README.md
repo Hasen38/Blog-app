@@ -1,4 +1,4 @@
-# Ethio-travel 
+# Blog-app 
 
 This repository contains the source code for the Blog app website, this blog app helps users easily create, publish, and share their thoughts and stories with the world.
 Built with Laravel 11,React Js,Rest Api, Laravel Sanctum.
@@ -17,7 +17,7 @@ Built with Laravel 11,React Js,Rest Api, Laravel Sanctum.
 clone the Repository
 
 ```bash
-pip install myawesomeproject
+```
 
 2. Go to project directory
 
