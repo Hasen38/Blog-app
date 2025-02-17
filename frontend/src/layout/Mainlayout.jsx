@@ -1,7 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/navbar';
-import Banner from '../components/banner'
 import Footer from '../components/Footer'
 
 
@@ -9,18 +8,22 @@ function Mainlayout() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <Navbar />
-        <Banner/>
+      <header className="bg-white shadow-md sticky top-0 z-50">
+        <div className="container mx-auto">
+          <Navbar />
+        </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-grow py-6">
         <Outlet />
       </main>
 
-      <footer>
-        <Footer/>
+      {/* Footer */}
+      <footer className="bg-white shadow-md mt-auto">
+        <div className="container mx-auto">
+          <Footer />
+        </div>
       </footer>
     </div>
   );

@@ -49,7 +49,7 @@ function Footer() {
         </div>
         <div className="mt-8 border-t border-gray-200 pt-8 text-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Your Blog Name. All rights reserved.
+            © {new Date().getFullYear()} DevCommunity. All rights reserved.
           </p>
         </div>
       </div>

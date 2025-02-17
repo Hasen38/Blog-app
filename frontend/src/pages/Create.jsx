@@ -1,140 +1,211 @@
-import React, { useState, useEffect } from 'react';
-import axiosClient from '../Axios/Axios-client';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axiosClient from "../Axios/Axios-client";
+import { useNavigate } from "react-router-dom";
 
 function CreateBlog() {
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [image, setImage] = useState(null);
+  const [user, setUser] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    body: "",
+    image: null,
+    category_id: "",
+    user_id: "",
+  });
   const [imagePreview, setImagePreview] = useState("");
   const [categories, setCategories] = useState([]);
-  // const [selectedCategory, setSelectedCategory] = useState("");
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosClient.get("/categories");
+        setCategories(response.data);
+        if (response.data.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            category_id: response.data[0].id,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
-  // useEffect(() => {
-  //   // Fetch categories when component mounts
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await axiosClient.get('categories');
-  //       setCategories(response.data);
-  //       if (response.data.length > 0) {
-  //         setSelectedCategory(response.data[0].id);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching categories:', error);
-  //     }
-  //   };
+    fetchCategories();
+  }, []);
 
-  //   fetchCategories();
-  // }, []);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axiosClient.get("/user");
+        if (response.data && response.data.id) {
+          setUser(response.data);
+          setFormData((prev) => ({
+            ...prev,
+            user_id: response.data.id.toString(),
+          }));
+        } else {
+          console.error("No valid user data received");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        navigate("/login");
+      }
+    };
+    fetchUser();
+  }, [navigate]);
 
-  // Handle image selection and preview
+  // Event Handlers
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file));  // For preview
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+      }));
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.user_id) {
+      console.error("No user_id available");
+      return;
+    }
+
+    try {
+      const submitData = new FormData();
+
+      // Explicitly add user_id first
+      submitData.append("user_id", formData.user_id);
+
+      // Then add the rest of the form data
+      Object.keys(formData).forEach((key) => {
+        if (formData[key] && key !== "user_id") {
+          submitData.append(key, formData[key]);
+        }
+      });
+
+      // Debug log
+      for (let pair of submitData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+
+      await axiosClient.post("/posts", submitData);
+      navigate("/");
+    } catch (error) {
+      console.error("Error submitting the form:", error);
     }
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Component Rendering
+  const renderImagePreview = () => {
+    if (!imagePreview) return null;
 
-    // Create a new FormData object and append form fields
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('body', body);
-    // formData.append('category', selectedCategory);
-    if (image) formData.append('image', image);
-
-    // Send POST request to API
-    axiosClient
-      .post('/posts', formData) // Directly pass the formData
-      .then(() => {
-        navigate('/'); // Navigate to homepage after successful submission
-      })
-      .catch((error) => {
-        console.error("There was an error submitting the form!", error);
-        // Handle error (optional: show an error message to the user)
-      });
+    return (
+      <div className="mt-4">
+        <img
+          src={imagePreview}
+          alt="Preview"
+          className="max-w-full h-auto rounded-lg shadow-md"
+        />
+      </div>
+    );
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Create a New Blog</h1>
-      
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg" encType='multipart/form-data'>
+    <div className="p-6 mx-auto max-w-2xl">
+      <h1 className="mb-6 text-3xl font-bold text-center">Create a New Blog</h1>
+
+      <form
+        onSubmit={handleSubmit}
+        className="p-6 bg-white rounded-lg shadow-lg"
+        encType="multipart/form-data"
+        method="POST"
+      >
         {/* Title input */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="title">
+          <label
+            className="block mb-2 font-semibold text-gray-700"
+            htmlFor="title"
+          >
             Blog Title
           </label>
           <input
             type="text"
             id="title"
-            className="w-full p-3 border rounded-lg"
+            className="p-3 w-full rounded-lg border"
             placeholder="Enter the title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={formData.title}
+            onChange={handleInputChange}
             required
           />
         </div>
-
-        {/* Image upload */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-lg mb-2" htmlFor="image">
-            Upload Image
-          </label>
-          <input
-            type="file"
-            id="image"
-            onChange={handleImageChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            accept="image/*"
-          />
-          {imagePreview && (
-            <div className="mt-4">
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="max-w-full h-auto rounded-lg shadow-md"
-              />
-            </div>
-          )}
+        <div>
+          <input type="hidden" id="user_id" name="user_id" value={user?.id} />
         </div>
 
-        {/* Category */}
-        {/* <div className="mb-4">
-          <label htmlFor="category" className="block text-gray-700 font-medium mb-2">
+        {/* Category Selection */}
+        <div className="mb-4">
+          <label
+            className="block mb-2 font-semibold text-gray-700"
+            htmlFor="category_id"
+          >
             Category
           </label>
           <select
-            id="category"
-            name="category"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            id="category_id"
+            className="p-3 w-full rounded-lg border"
+            value={formData.category_id}
+            onChange={handleInputChange}
+            required
           >
+            <option value="">Select a category</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
               </option>
             ))}
           </select>
-        </div> */}
+        </div>
+
+        {/* Image upload */}
+        <div className="mb-4">
+          <label className="block mb-2 text-lg text-gray-700" htmlFor="image">
+            Upload Image
+          </label>
+          <input
+            type="file"
+            id="image"
+            onChange={handleImageChange}
+            className="p-3 w-full rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            accept="image/*"
+          />
+          {renderImagePreview()}
+        </div>
 
         {/* Body content */}
         <div className="mb-6">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="body">
+          <label
+            className="block mb-2 font-semibold text-gray-700"
+            htmlFor="body"
+          >
             Blog Content
           </label>
           <textarea
             id="body"
-            className="w-full p-3 border rounded-lg"
+            className="p-3 w-full rounded-lg border"
             placeholder="Write your blog content"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
+            value={formData.body}
+            onChange={handleInputChange}
             rows="5"
             required
           />
@@ -143,7 +214,7 @@ function CreateBlog() {
         {/* Submit button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-200"
+          className="py-3 w-full text-white bg-blue-500 rounded-lg transition duration-200 hover:bg-blue-600"
         >
           Publish
         </button>
